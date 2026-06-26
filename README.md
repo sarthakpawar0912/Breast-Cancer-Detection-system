@@ -3564,6 +3564,593 @@ The world has many real problems. AI can help solve some of them. Yours might be
 
 ---
 
+## A13. Code Snippets Reference
+
+A collection of useful code patterns for anyone extending this project. Each snippet is short, complete, and copy-paste ready.
+
+### A13.1 Loading the Trained Model in Python
+
+```python
+import tensorflow as tf
+from tensorflow.keras.models import load_model
+
+# Load the saved model
+model = load_model('best_model.h5', compile=False)
+print(model.summary())
+print(f"Input shape: {model.input_shape}")
+print(f"Output shape: {model.output_shape}")
+```
+
+### A13.2 Running a Single Prediction
+
+```python
+import numpy as np
+from PIL import Image
+
+def predict(image_path, model):
+    img = Image.open(image_path).convert('RGB')
+    img = img.resize((224, 224))
+    arr = np.array(img, dtype=np.float32) / 255.0
+    arr = np.expand_dims(arr, axis=0)  # add batch dim
+    prob = float(model.predict(arr)[0][0])
+    label = 'malignant' if prob > 0.5 else 'benign'
+    confidence = prob if prob > 0.5 else (1 - prob)
+    return {'label': label, 'confidence': round(confidence * 100, 2)}
+
+result = predict('sample.png', model)
+print(result)
+```
+
+### A13.3 A Minimal Flask Backend
+
+```python
+from flask import Flask, request, jsonify
+from PIL import Image
+import io
+import numpy as np
+from tensorflow.keras.models import load_model
+
+app = Flask(__name__)
+model = load_model('best_model.h5', compile=False)
+
+@app.route('/detect-cancer', methods=['POST'])
+def detect():
+    if 'image' not in request.files:
+        return jsonify({'error': 'no image'}), 400
+    f = request.files['image']
+    img = Image.open(io.BytesIO(f.read())).convert('RGB').resize((224, 224))
+    arr = np.array(img, dtype=np.float32) / 255.0
+    arr = np.expand_dims(arr, 0)
+    prob = float(model.predict(arr)[0][0])
+    label = 'positive' if prob > 0.5 else 'negative'
+    conf = prob if prob > 0.5 else 1 - prob
+    return jsonify({'result': label, 'confidence': round(conf * 100)})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+```
+
+Run: `python app.py`. Test: `curl -F image=@sample.png http://localhost:5000/detect-cancer`.
+
+### A13.4 Node Server Proxying to the Python Backend
+
+```javascript
+// In server.js, replace the mock handleDetectCancer with:
+const https = require('http');
+
+function handleDetectCancer(req, res) {
+  const proxy = https.request({
+    hostname: 'localhost', port: 5000, path: '/detect-cancer',
+    method: 'POST', headers: req.headers,
+  }, (pyRes) => {
+    res.writeHead(pyRes.statusCode, pyRes.headers);
+    pyRes.pipe(res);
+  });
+  req.pipe(proxy);
+}
+```
+
+This forwards everything to the Python model server. The frontend doesn't change.
+
+### A13.5 TensorFlow Data Pipeline
+
+```python
+import tensorflow as tf
+
+def load_image(path, label):
+    img = tf.io.read_file(path)
+    img = tf.image.decode_png(img, channels=3)
+    img = tf.image.resize(img, [224, 224])
+    img = img / 255.0
+    return img, label
+
+train_ds = (
+    tf.data.Dataset.from_tensor_slices((paths, labels))
+    .shuffle(1000)
+    .map(load_image, num_parallel_calls=tf.data.AUTOTUNE)
+    .batch(64)
+    .prefetch(tf.data.AUTOTUNE)
+)
+```
+
+### A13.6 Custom Keras Callback for Early Stopping
+
+```python
+from tensorflow.keras.callbacks import EarlyStopping
+
+early_stop = EarlyStopping(
+    monitor='val_loss',
+    patience=5,        # stop after 5 epochs without improvement
+    restore_best_weights=True
+)
+
+model.fit(train_ds, validation_data=val_ds, epochs=50, callbacks=[early_stop])
+```
+
+### A13.7 Confusion Matrix Plot
+
+```python
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+cm = confusion_matrix(y_true, y_pred)
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+            xticklabels=['Benign', 'Malignant'],
+            yticklabels=['Benign', 'Malignant'])
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.show()
+```
+
+### A13.8 Saving and Loading Model in Different Formats
+
+```python
+# Keras native HDF5
+model.save('model.h5')
+model = tf.keras.models.load_model('model.h5')
+
+# TensorFlow SavedModel (folder, supports serving)
+model.save('saved_model_dir')
+model = tf.keras.models.load_model('saved_model_dir')
+
+# TensorFlow Lite (mobile)
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+tflite_model = converter.convert()
+with open('model.tflite', 'wb') as f:
+    f.write(tflite_model)
+```
+
+### A13.9 Reproducible Random Seeds
+
+```python
+import random
+import numpy as np
+import tensorflow as tf
+import os
+
+SEED = 42
+random.seed(SEED)
+np.random.seed(SEED)
+tf.random.set_seed(SEED)
+os.environ['PYTHONHASHSEED'] = str(SEED)
+```
+
+Add this to the top of any notebook for reproducible runs.
+
+### A13.10 Tiny HTML Form for Testing the API
+
+```html
+<!DOCTYPE html>
+<form action="http://localhost:5000/detect-cancer" method="post" enctype="multipart/form-data">
+  <input type="file" name="image" accept="image/*" required>
+  <button type="submit">Predict</button>
+</form>
+```
+
+Save as `test.html`, open in browser. Useful for testing the backend without the full website.
+
+---
+
+## A14. Quick Reference Cheat Sheets
+
+### A14.1 Git Commands
+
+```
+git init                            create a new repo
+git clone <url>                     copy a remote repo
+git status                          see what's changed
+git add .                           stage all changes
+git add file.txt                    stage one file
+git commit -m "message"             create a commit
+git push                            send commits to remote
+git pull                            fetch & merge remote changes
+git log --oneline                   compact commit history
+git branch                          list branches
+git checkout -b new-branch          create & switch branch
+git merge other-branch              merge into current
+git diff                            see unstaged changes
+git stash                           hide changes temporarily
+git reset HEAD~1                    undo last commit (keep changes)
+git revert <commit>                 undo a commit safely
+```
+
+### A14.2 npm / Node Commands
+
+```
+node --version                      Node version
+node script.js                      run a JS file
+npm init -y                         create package.json
+npm install <pkg>                   add a dependency
+npm install -D <pkg>                add a dev dependency
+npm uninstall <pkg>                 remove
+npm run <script>                    run a defined script
+npm update                          update all deps
+npx <cmd>                           run without installing
+```
+
+### A14.3 Python ML Quick Reference
+
+```python
+# Install: pip install tensorflow scikit-learn pandas numpy
+
+import tensorflow as tf
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+
+# Load data
+df = pd.read_csv('data.csv')
+X = df.drop('label', axis=1)
+y = df['label']
+
+# Split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+# Build a simple model
+model = tf.keras.Sequential([
+    tf.keras.layers.Dense(64, activation='relu', input_shape=(X.shape[1],)),
+    tf.keras.layers.Dense(1, activation='sigmoid')
+])
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+# Train
+model.fit(X_train, y_train, epochs=10, validation_split=0.2)
+
+# Evaluate
+y_pred = (model.predict(X_test) > 0.5).astype(int)
+print(classification_report(y_test, y_pred))
+```
+
+### A14.4 HTTP Status Codes Cheat Sheet
+
+| Code | Meaning                | When                                 |
+|------|------------------------|--------------------------------------|
+| 200  | OK                     | success                              |
+| 201  | Created                | new resource created                 |
+| 204  | No Content             | success, no body                     |
+| 301  | Moved Permanently      | URL changed forever                  |
+| 302  | Found                  | URL changed temporarily              |
+| 304  | Not Modified           | cache is still fresh                 |
+| 400  | Bad Request            | malformed input                      |
+| 401  | Unauthorized           | need to log in                       |
+| 403  | Forbidden              | logged in but not allowed            |
+| 404  | Not Found              | resource doesn't exist               |
+| 405  | Method Not Allowed     | wrong HTTP verb                      |
+| 409  | Conflict               | state collision                      |
+| 413  | Payload Too Large      | upload too big                       |
+| 422  | Unprocessable Entity   | semantically wrong                   |
+| 429  | Too Many Requests      | rate limited                         |
+| 500  | Internal Server Error  | server crashed                       |
+| 502  | Bad Gateway            | upstream service failed              |
+| 503  | Service Unavailable    | overloaded or down                   |
+| 504  | Gateway Timeout        | upstream too slow                    |
+
+### A14.5 Linux / Bash Commands (Useful on Server)
+
+```
+ls -la                              list files (long format)
+cd /path/to/dir                     change directory
+pwd                                 print current directory
+cp src dst                          copy
+mv src dst                          move / rename
+rm file                             delete file
+rm -rf dir                          delete dir recursively
+mkdir -p path                       make dir + parents
+cat file                            print file
+grep "text" file                    search in file
+find . -name "*.py"                 find files by name
+chmod +x script.sh                  make executable
+ps aux | grep node                  find running processes
+kill -9 <PID>                       force-kill a process
+df -h                               disk usage
+du -sh dir                          size of dir
+netstat -tlnp                       open ports
+curl http://...                     HTTP request
+ssh user@host                       remote shell
+scp file user@host:path             secure copy
+```
+
+### A14.6 VSCode Useful Shortcuts
+
+| Shortcut                   | Action                          |
+|----------------------------|---------------------------------|
+| Ctrl + P                   | Quick open file                 |
+| Ctrl + Shift + P           | Command palette                 |
+| Ctrl + /                   | Toggle line comment             |
+| Ctrl + B                   | Toggle sidebar                  |
+| Ctrl + `                   | Toggle terminal                 |
+| Ctrl + D                   | Select next occurrence          |
+| Alt + Click                | Multiple cursors                |
+| Ctrl + Shift + F           | Search across files             |
+| F2                         | Rename symbol                   |
+| F12                        | Go to definition                |
+| F5                         | Start debugging                 |
+| Ctrl + Space               | Trigger suggestion              |
+
+### A14.7 Debugging ML Models — Checklist
+
+When the model isn't working:
+- Is the data loaded correctly? Print shape, dtype, min/max.
+- Are labels correct? Plot 10 random images with their labels.
+- Is normalization right? Pixel values should be 0–1, not 0–255.
+- Is the model output shape what you expect?
+- Are you using the right loss for the task? (BCE for binary, CCE for multi-class.)
+- Is the learning rate too high (loss diverges) or too low (loss flatlines)?
+- Are training and validation losses both decreasing? (If only training is dropping, you're overfitting.)
+- Did you set random seeds?
+- Are you saving the best model, not just the last?
+- Are batch sizes consistent?
+
+---
+
+## A15. Extended Glossary — Additional Technical Terms
+
+(Continued from Section 29 in Part 1)
+
+**API (Application Programming Interface)** — A defined way for one piece of software to talk to another. Web APIs use HTTP.
+
+**Backbone** — The pretrained CNN at the heart of a transfer-learning model.
+
+**Backend** — Server-side code that runs away from the user, often handling data, business logic, and storage.
+
+**Base64** — A way to encode binary data as ASCII text, often used to embed images directly in HTML or JSON.
+
+**Bash** — The default Linux shell. Used to run commands in a terminal.
+
+**Bias (in ML)** — Both (a) a bias term added to neuron outputs, and (b) systematic error from unfair data.
+
+**Boundary (in multipart)** — A delimiter string used to separate parts in a multipart HTTP request body.
+
+**Bug** — An unexpected behavior in code.
+
+**Callback** — A function passed as an argument, run later when something happens.
+
+**Cell (in Jupyter)** — A discrete block of code or markdown that can be executed independently.
+
+**Channel (in images)** — One of the layers of color information (R, G, or B).
+
+**Checkpoint** — A saved snapshot of model weights during training.
+
+**Class** — A category or label the model can predict (e.g., "benign", "malignant").
+
+**Compile (Keras)** — Configure a model with optimizer, loss, and metrics before training.
+
+**Confidence (ML)** — How sure the model is about its prediction, often the output probability.
+
+**Container (Docker)** — A lightweight, isolated environment that bundles code and dependencies.
+
+**Convergence** — When training reaches a stable, low loss.
+
+**CSV (Comma-Separated Values)** — A simple text format for tabular data.
+
+**Database** — Structured storage for data, queryable. Examples: PostgreSQL, MySQL, MongoDB.
+
+**Decorator (Python)** — A function that modifies another function. Marked with `@`.
+
+**Dependency** — An external library or package your code uses.
+
+**DevOps** — Practices that combine development and operations for faster, safer software delivery.
+
+**Diff** — The difference between two versions of a file.
+
+**DICOM** — The standard format for medical imaging data.
+
+**Dimension** — One axis of a tensor.
+
+**Domain Shift** — When training data and production data look different.
+
+**Driver (ML)** — A small script that orchestrates training or evaluation.
+
+**Edge Case** — An unusual input or situation that might break the system.
+
+**Endpoint (API)** — A specific URL where the API can be called.
+
+**Environment Variable** — A value set outside the program, accessible via `process.env` or `os.environ`.
+
+**Epoch** — One full pass through the training dataset.
+
+**Fallback** — A backup behavior when the primary one fails.
+
+**Feature** — An input value to a model. For images, every pixel is a feature.
+
+**Feed-Forward** — A network where data flows in one direction (no loops).
+
+**Flag (CLI)** — A command-line option like `--verbose`.
+
+**Frontend** — Client-side code that runs in the browser.
+
+**Function** — A reusable block of code.
+
+**Garbage Collection** — Automatic memory cleanup.
+
+**Generator (Python)** — A function that yields values lazily (one at a time).
+
+**Git** — A version-control system.
+
+**GPU (Graphics Processing Unit)** — Specialized hardware fast at parallel math, ideal for deep learning.
+
+**Hash** — A fixed-size fingerprint of data. SHA-256 is one type.
+
+**Header (HTTP)** — Metadata in an HTTP request or response.
+
+**Heuristic** — A rule of thumb that usually works but isn't guaranteed.
+
+**Hot Reload** — A development feature that automatically reloads a server when code changes.
+
+**Hyperparameter** — A setting that controls training (learning rate, batch size, etc.).
+
+**Idempotent** — An operation that has the same effect no matter how many times it's repeated.
+
+**Image (Docker)** — A blueprint for a container.
+
+**Index (database)** — A data structure that speeds up lookups.
+
+**Inference** — Using a trained model to make predictions.
+
+**Initializer (weights)** — A scheme for choosing initial weight values before training.
+
+**Interpreter** — Software that runs code line by line (Python uses one).
+
+**Job Queue** — A system for processing tasks asynchronously (Redis, RabbitMQ).
+
+**JSON Web Token (JWT)** — A signed token format for authentication.
+
+**Kernel (CNN)** — Another word for filter.
+
+**Latency** — Time from request to response.
+
+**Library** — A reusable piece of code; smaller than a framework.
+
+**Linter** — A tool that flags style or correctness issues in code.
+
+**Listener (event)** — A function that runs when an event fires.
+
+**Load Balancer** — A device or software that distributes requests across multiple servers.
+
+**Localhost** — Your own machine, IP address 127.0.0.1.
+
+**Logits** — Raw model outputs before applying softmax or sigmoid.
+
+**Loop (programming)** — Repeating a block of code.
+
+**Manifest (HTML)** — A file describing a web app's capabilities.
+
+**Memoization** — Caching the result of a function call.
+
+**Microservice** — A small, independent service that does one thing well.
+
+**Middleware** — Code that sits between request and handler, often for logging or authentication.
+
+**Migration (database)** — A controlled change to database schema.
+
+**Mock** — A fake implementation used for testing or demonstration.
+
+**Module** — A self-contained unit of code, usually one file.
+
+**Monorepo** — A single repository containing multiple projects.
+
+**Namespace** — A container for names to avoid clashes.
+
+**Node (graph theory)** — A vertex in a graph.
+
+**Notebook** — A document mixing code, text, and visualizations.
+
+**One-Hot Encoding** — Representing a category as a vector with one 1 and rest 0s.
+
+**Pipeline (ML)** — A sequence of data processing steps.
+
+**Port** — A number identifying a service on a computer (HTTP defaults to 80, our server uses 8080).
+
+**POST** — An HTTP method for sending data.
+
+**Pretrained Model** — Weights already learned from another task, ready to fine-tune.
+
+**Process** — A running instance of a program.
+
+**Production** — The live environment where real users use the system.
+
+**Query** — A request for data, often to a database.
+
+**RAM** — Random Access Memory; the computer's short-term memory.
+
+**Refactor** — Improve code structure without changing behavior.
+
+**Regression (ML)** — Predicting a continuous number (vs. classification).
+
+**Repository** — A folder tracked by version control.
+
+**Request** — Data sent from client to server.
+
+**Response** — Data sent from server to client.
+
+**REST** — A set of conventions for designing web APIs.
+
+**Rollback** — Reverting to a previous version.
+
+**Route** — A URL pattern handled by a server function.
+
+**Runtime** — The environment in which code runs.
+
+**Sandbox** — An isolated environment for testing.
+
+**Schema** — The structure of data (column names, types).
+
+**Script** — A short program, often run from a command line.
+
+**SDK (Software Development Kit)** — Libraries and tools for building on top of a platform.
+
+**Serialization** — Converting an object to a format that can be saved or transmitted.
+
+**Service** — A long-running program that responds to requests.
+
+**Session** — A user's interaction over time, often tracked via cookies.
+
+**Singleton** — A class with only one instance.
+
+**SQL (Structured Query Language)** — The standard language for relational databases.
+
+**SSL/TLS** — Cryptography that secures HTTP into HTTPS.
+
+**Stack Trace** — The list of function calls leading to an error.
+
+**State (UI)** — Data describing what the user sees right now.
+
+**Subnet** — A range of IP addresses.
+
+**Synchronous** — Operations that block until they complete.
+
+**Tag (Git)** — A named pointer to a specific commit, often used for versions.
+
+**Test (software)** — A small program that verifies another program works.
+
+**Throttle** — Slow down requests to avoid overload.
+
+**Token (auth)** — A string proving identity or access.
+
+**TPU (Tensor Processing Unit)** — Google's custom hardware for ML, even faster than GPUs.
+
+**Type (data)** — The kind of value (number, string, boolean, etc.).
+
+**UUID** — A 128-bit unique identifier.
+
+**Variable** — A named storage for a value.
+
+**Vector (math)** — A 1D array of numbers.
+
+**Virtual Environment** — An isolated Python environment per project.
+
+**Webhook** — A user-defined HTTP callback triggered by an event.
+
+**Worker** — A process or thread doing work in the background.
+
+**Yield (Python)** — A keyword that returns a value from a generator without ending it.
+
+---
+
 # End of Document
 
 You have reached the end. Thank you for reading.
