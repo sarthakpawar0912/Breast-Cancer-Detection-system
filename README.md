@@ -85,11 +85,81 @@ This document has **two parts**.
 
 ### Part 4 — The BreakHis Dataset Complete Reference
 
-[Jump to Part 4 →](#part-4--the-breakhis-dataset-complete-reference)
+[Jump to Part 4 top →](#part-4-anchor)
+
+- 4.1  [What Is the BreakHis Dataset?](#41-what-is-the-breakhis-dataset)
+- 4.2  [History and Origin](#42-history-and-origin)
+- 4.3  [Patient Demographics](#43-patient-demographics)
+- 4.4  [Why BreakHis Matters in Research](#44-why-breakhis-matters-in-research)
+- 4.5  [Dataset Size and Structure](#45-dataset-size-and-structure)
+- 4.6  [The Two Classes: Benign vs Malignant](#46-the-two-classes-benign-vs-malignant)
+- 4.7  [The Four Benign Subtypes Explained](#47-the-four-benign-subtypes-explained)
+- 4.8  [The Four Malignant Subtypes Explained](#48-the-four-malignant-subtypes-explained)
+- 4.9  [The Four Magnification Levels](#49-the-four-magnification-levels)
+- 4.10 [Image Specifications](#410-image-specifications)
+- 4.11 [Folder Layout](#411-folder-layout)
+- 4.12 [File Naming Convention](#412-file-naming-convention)
+- 4.13 [The Folds.csv File](#413-the-foldscsv-file)
+- 4.14 [Patient-Level Information](#414-patient-level-information)
+- 4.15 [How to Access and Download](#415-how-to-access-and-download)
+- 4.16 [How We Loaded It in Our Notebook](#416-how-we-loaded-it-in-our-notebook)
+- 4.17 [Class Distribution Analysis](#417-class-distribution-analysis)
+- 4.18 [Why It's Imbalanced](#418-why-its-imbalanced)
+- 4.19 [Patient-Level vs Image-Level Splits](#419-patient-level-vs-image-level-splits)
+- 4.20 [Recommended Train/Validation/Test Splits](#420-recommended-trainvalidationtest-splits)
+- 4.21 [Sample Images Description](#421-sample-images-description)
+- 4.22 [Augmentation Strategies for BreakHis](#422-augmentation-strategies-for-breakhis)
+- 4.23 [Color Normalization for BreakHis](#423-color-normalization-for-breakhis)
+- 4.24 [Citation and Licensing](#424-citation-and-licensing)
+- 4.25 [Comparison with Other Histopathology Datasets](#425-comparison-with-other-histopathology-datasets)
+- 4.26 [Published Benchmark Results](#426-published-benchmark-results)
+- 4.27 [Known Limitations of BreakHis](#427-known-limitations-of-breakhis)
+- 4.28 [Common Mistakes Researchers Make](#428-common-mistakes-researchers-make)
+- 4.29 [Best Practices](#429-best-practices)
+- 4.30 [Future Versions and Extensions](#430-future-versions-and-extensions)
 
 ### Part 5 — The Training Notebook Explained Cell by Cell
 
-[Jump to Part 5 →](#part-5--the-training-notebook-explained-cell-by-cell)
+[Jump to Part 5 top →](#part-5-anchor)
+
+- 5.1  [Notebook Overview](#51-notebook-overview)
+- 5.2  [File Location and Format](#52-file-location-and-format)
+- 5.3  [Environment Setup](#53-environment-setup)
+- 5.4  [Required Python Libraries](#54-required-python-libraries)
+- 5.5  [The Notebook Structure](#55-the-notebook-structure)
+- 5.6  [Cell-by-Cell Walkthrough](#56-cell-by-cell-walkthrough)
+- 5.7  [The Training Pipeline End to End](#57-the-training-pipeline-end-to-end)
+- 5.8  [Reading the Training Output](#58-reading-the-training-output)
+- 5.9  [Common Errors and Fixes](#59-common-errors-and-fixes)
+- 5.10 [How to Modify the Notebook](#510-how-to-modify-the-notebook)
+- 5.11 [How to Run on Different Hardware](#511-how-to-run-on-different-hardware)
+- 5.12 [Adapting for Production](#512-adapting-for-production)
+- 5.13 [What the Saved Model File Contains](#513-what-the-saved-model-file-contains)
+- 5.14 [Summary of the Notebook](#514-summary-of-the-notebook)
+
+### Part 6 — Complete Project Code Explained
+
+[Jump to Part 6 top →](#part-6-anchor)
+
+- 6.1  [Code Overview and File Tree](#61-code-overview-and-file-tree)
+- 6.2  [The Backend Server — server.js](#62-the-backend-server--serverjs)
+- 6.3  [The Launcher — run.bat](#63-the-launcher--runbat)
+- 6.4  [VSCode Configuration — launch.json and tasks.json](#64-vscode-configuration--launchjson-and-tasksjson)
+- 6.5  [The Homepage — index.html](#65-the-homepage--indexhtml)
+- 6.6  [The Prediction Page — price.html](#66-the-prediction-page--pricehtml)
+- 6.7  [The About Page — about.html](#67-the-about-page--abouthtml)
+- 6.8  [The Precautions Page — service.html](#68-the-precautions-page--servicehtml)
+- 6.9  [The Contact Page — contact.html](#69-the-contact-page--contacthtml)
+- 6.10 [The Appointment Page — appointment.html](#610-the-appointment-page--appointmenthtml)
+- 6.11 [The Blog Pages — blog.html and detail.html](#611-the-blog-pages--bloghtml-and-detailhtml)
+- 6.12 [Custom CSS — style.css](#612-custom-css--stylecss)
+- 6.13 [Custom JavaScript — main.js](#613-custom-javascript--mainjs)
+- 6.14 [Third-Party Libraries Used](#614-third-party-libraries-used)
+- 6.15 [The Complete Request-Response Flow](#615-the-complete-request-response-flow)
+- 6.16 [Data Flow Diagrams](#616-data-flow-diagrams)
+- 6.17 [Reading Order for a New Developer](#617-reading-order-for-a-new-developer)
+- 6.18 [Debugging Each Component](#618-debugging-each-component)
+- 6.19 [Quick Reference — Where Is X?](#619-quick-reference--where-is-x)
 
 ---
 ---
@@ -4160,6 +4230,8 @@ When the model isn't working:
 ---
 ---
 
+<a id="part-4-anchor"></a>
+
 # PART 4 — THE BREAKHIS DATASET COMPLETE REFERENCE
 
 Judges, viva panels, and reviewers ask many questions about the dataset. This part is your complete reference. If you read nothing else before your demo, read this part carefully. Almost any dataset question that can be asked is answered here.
@@ -4958,6 +5030,8 @@ For our future work, we could combine BreakHis with one of the newer datasets to
 
 ---
 ---
+
+<a id="part-5-anchor"></a>
 
 # PART 5 — THE TRAINING NOTEBOOK EXPLAINED CELL BY CELL
 
@@ -5845,6 +5919,1725 @@ It runs in roughly 1-2 hours on a Kaggle GPU and produces a model that achieves 
 This is a **research notebook**, not production code. For real deployment, the steps would be refactored into modular Python files with proper testing, configuration, and serving infrastructure.
 
 For our project, the notebook serves its purpose: it produces a trained model, demonstrates the pipeline end-to-end, and lets us understand what the model has learned. The next step (real backend integration) is documented as future work.
+
+---
+---
+
+<a id="part-6-anchor"></a>
+
+# PART 6 — COMPLETE PROJECT CODE EXPLAINED
+
+This part walks through **every file** in the project — what each one does, how it works line by line, and how it connects to the rest. By the end you will be able to:
+
+- Read any file in the project and understand it.
+- Make small changes confidently.
+- Debug problems by knowing where to look.
+- Explain the code in your viva or demo without hesitation.
+
+[Back to top ↑](#ladylumina--breast-cancer-prediction-system)
+
+---
+
+## 6.1 Code Overview and File Tree
+
+### 6.1.1 The Big Picture
+
+Our project has three types of code:
+1. **Backend (server)** — Node.js code that runs on your computer, serves files and handles the prediction endpoint.
+2. **Frontend (browser)** — HTML, CSS, and JavaScript code that runs in the user's web browser.
+3. **Glue / Tooling** — batch scripts, VSCode configs that make the project easy to run.
+
+There is no database, no Python code (the model is in a separate notebook), and no external service dependencies. Everything is self-contained.
+
+### 6.1.2 The Complete File Tree
+
+```
+hospital-website-template/
+│
+├── server.js                  # The Node.js backend server (THE BRAIN)
+├── run.bat                    # Windows double-click launcher
+│
+├── .vscode/
+│   ├── launch.json           # VSCode F5 = run + open browser
+│   └── tasks.json            # Background server task definition
+│
+├── index.html                 # Homepage (landing page)
+├── about.html                 # About Us
+├── service.html               # Precautions for breast cancer
+├── price.html                 # *** THE PREDICTION PAGE — main feature ***
+├── appointment.html           # Patient appointment form
+├── contact.html               # Contact information
+├── blog.html                  # Blog grid listing
+├── detail.html                # Single blog article
+│
+├── css/
+│   ├── style.css             # Our custom styling
+│   └── bootstrap.min.css     # Bootstrap 5 framework (pre-built)
+│
+├── js/
+│   └── main.js               # Site-wide JavaScript (jQuery interactions)
+│
+├── img/                       # All images
+│   ├── hero.jpg              # Homepage hero background
+│   ├── about.jpg             # About section image
+│   ├── team-1.png to team-3.png    # Process step images
+│   ├── price-1.jpg to price-4.jpg  # Feature cards
+│   ├── blog-1.jpg to blog-3.jpg    # Blog post images
+│   ├── testimonial-1.jpg to 3.jpg  # Team member photos
+│   ├── user.jpg              # Generic user avatar
+│   └── favicon.ico           # Browser tab icon (currently missing — known issue)
+│
+├── lib/                       # Third-party library files
+│   ├── owlcarousel/          # Owl Carousel (image sliders)
+│   ├── tempusdominus/        # Date/time picker
+│   ├── easing/               # jQuery animation easing
+│   └── waypoints/            # Scroll-trigger library
+│
+└── scss/                      # SCSS source files for Bootstrap (not actively used)
+    ├── bootstrap/
+    └── bootstrap.scss
+```
+
+### 6.1.3 What Each File Does at a Glance
+
+| File              | Role                                  | Language     | Size       |
+|-------------------|---------------------------------------|--------------|------------|
+| server.js         | Backend HTTP server, prediction API   | JavaScript   | ~130 lines |
+| run.bat           | Double-click launcher                 | Batch        | ~7 lines   |
+| .vscode/*.json    | VSCode debug + task config            | JSON         | ~30 lines  |
+| index.html        | Home page                             | HTML         | ~300 lines |
+| about.html        | About page                            | HTML         | ~200 lines |
+| service.html      | Precautions                           | HTML         | ~250 lines |
+| price.html        | Prediction (main)                     | HTML + JS    | ~350 lines |
+| appointment.html  | Appointment form                      | HTML         | ~250 lines |
+| contact.html      | Contact details                       | HTML         | ~250 lines |
+| blog.html         | Blog grid                             | HTML         | ~200 lines |
+| detail.html       | Blog article                          | HTML         | ~250 lines |
+| css/style.css     | Theme + custom styles                 | CSS          | ~246 lines |
+| js/main.js        | Site-wide interactions                | JavaScript   | ~104 lines |
+| lib/*             | Third-party libraries                 | Mixed        | ~MBs       |
+
+### 6.1.4 How They Connect
+
+```
+                                ┌──────────────────┐
+                                │   USER BROWSER   │
+                                └────────┬─────────┘
+                                         │
+                  GET /index.html        │       POST /detect-cancer
+                  (and other pages)      │       (with form + image)
+                                         │
+                                         ▼
+                                ┌──────────────────┐
+                                │   server.js      │
+                                │   (Node.js)      │
+                                └────────┬─────────┘
+                                         │
+                          ┌──────────────┴──────────────┐
+                          ▼                             ▼
+                  ┌─────────────────┐         ┌─────────────────┐
+                  │  Static files   │         │  Mock prediction│
+                  │  (HTML/CSS/JS/  │         │   handler       │
+                  │   images)       │         │  (SHA-256 hash) │
+                  └─────────────────┘         └─────────────────┘
+```
+
+Every page request hits `server.js`. If the URL is a file, it serves that file. If it is `/detect-cancer`, it runs the mock predictor.
+
+The browser, once it has loaded an HTML page, then asks the server for the CSS, JS, and images referenced in that HTML. Each is a separate request, all handled by `server.js`.
+
+---
+
+## 6.2 The Backend Server — server.js
+
+This is the single most important file in the project. It is also the smallest (around 130 lines). Let us go through it section by section.
+
+### 6.2.1 The Imports (Lines 1–4)
+
+```javascript
+const http = require("http");
+const fs = require("fs");
+const path = require("path");
+const crypto = require("crypto");
+```
+
+**What each does:**
+- `http` — Node's built-in module for creating an HTTP server. Lets us listen on a port and respond to requests.
+- `fs` — File system module. Lets us read files from disk.
+- `path` — Helps us safely build file paths that work on Windows, Mac, and Linux.
+- `crypto` — Cryptographic functions. We use SHA-256 here for the mock prediction.
+
+**Why no external libraries?** All four are built into Node. No `npm install` needed. Anyone can run this project after just installing Node itself.
+
+### 6.2.2 The Configuration Constants (Lines 6–7)
+
+```javascript
+const PORT = process.env.PORT || 8080;
+const ROOT = __dirname;
+```
+
+**`PORT`:** the port number the server listens on.
+- If you set an environment variable `PORT=3000`, that wins.
+- Otherwise default to 8080.
+- This pattern is universal — it lets you override without editing the code.
+
+**`ROOT`:** the directory where `server.js` lives.
+- `__dirname` is a special Node variable.
+- We use this to ensure we only serve files inside the project, not anywhere on disk.
+
+### 6.2.3 The MIME Type Map (Lines 8–26)
+
+```javascript
+const MIME = {
+  ".html": "text/html; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".js": "application/javascript; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".gif": "image/gif",
+  ".svg": "image/svg+xml",
+  ".ico": "image/x-icon",
+  ".woff": "font/woff",
+  ".woff2": "font/woff2",
+  ".ttf": "font/ttf",
+  ".eot": "application/vnd.ms-fontobject",
+  ".map": "application/json; charset=utf-8",
+  ".scss": "text/plain; charset=utf-8",
+  ".txt": "text/plain; charset=utf-8",
+};
+```
+
+**What this is:** A lookup table mapping file extensions to **MIME types** — the standard way to tell the browser what kind of file it is receiving.
+
+**Why is it needed?** Without the right MIME type, the browser may:
+- Show CSS as plain text instead of applying it.
+- Refuse to run JavaScript.
+- Display images as random characters.
+- Get confused about character encoding (Unicode characters break).
+
+**`charset=utf-8`** on text types tells the browser to interpret bytes as Unicode — important so that special characters like the em-dash (—) display correctly.
+
+### 6.2.4 The sendJSON Helper (Lines 28–36)
+
+```javascript
+function sendJSON(res, status, obj) {
+  const body = JSON.stringify(obj);
+  res.writeHead(status, {
+    "Content-Type": "application/json; charset=utf-8",
+    "Content-Length": Buffer.byteLength(body),
+    "Cache-Control": "no-store",
+  });
+  res.end(body);
+}
+```
+
+**What it does:** Sends a JSON response in one line.
+- Converts an object to a JSON string with `JSON.stringify`.
+- Calculates the byte length of the body.
+- Sends HTTP headers (status code, content type, content length, cache control).
+- Writes the body and ends the response.
+
+**Why a helper?** We use it in many places (success response, error responses). DRY (Don't Repeat Yourself).
+
+**`Cache-Control: no-store`** — tells the browser NOT to cache the response. We always want a fresh prediction.
+
+### 6.2.5 The Mock Prediction Handler (Lines 41–84)
+
+This is the heart of the API.
+
+```javascript
+function handleDetectCancer(req, res) {
+  if (req.method !== "POST") {
+    return sendJSON(res, 405, { error: "Method not allowed. Use POST." });
+  }
+
+  const chunks = [];
+  let total = 0;
+  const MAX = 15 * 1024 * 1024; // 15 MB
+
+  req.on("data", (chunk) => {
+    total += chunk.length;
+    if (total > MAX) {
+      req.destroy();
+      return sendJSON(res, 413, { error: "Image too large (max 15 MB)." });
+    }
+    chunks.push(chunk);
+  });
+
+  req.on("end", () => {
+    if (total === 0) {
+      return sendJSON(res, 400, { error: "No image received." });
+    }
+
+    const buf = Buffer.concat(chunks);
+    const hash = crypto.createHash("sha256").update(buf).digest();
+    const score = hash[0] / 255; // 0..1
+    const result = score > 0.5 ? "positive" : "negative";
+    const confidence = Math.round((result === "positive" ? score : 1 - score) * 100);
+
+    setTimeout(() => {
+      sendJSON(res, 200, {
+        result,
+        confidence,
+        mock: true,
+        note: "Demo result — no ML model is connected. Replace /detect-cancer with a real backend.",
+      });
+    }, 800);
+  });
+
+  req.on("error", () => sendJSON(res, 500, { error: "Upload failed." }));
+}
+```
+
+**Step by step:**
+
+1. **Check the HTTP method.** If it is not POST, reject with status 405. (Why? GET requests can be cached or bookmarked, and we never want a prediction to be cached or shared by URL.)
+
+2. **Set up to collect the body.** Node's HTTP request is a *stream* — data arrives in chunks over time. We collect chunks into an array and track the total size.
+
+3. **Enforce a max size.** If the total exceeds 15 MB, we destroy the connection and respond with status 413 (Payload Too Large). This prevents a malicious user from sending a 10 GB file and crashing our server.
+
+4. **When all data has arrived (`req.on("end")`):**
+   - If total is 0 bytes, the user sent an empty body — respond 400 (Bad Request).
+   - Otherwise, concatenate all chunks into one Buffer.
+   - Compute a SHA-256 hash of the bytes.
+   - Use the first byte of the hash (0–255) divided by 255 to get a score 0.0–1.0.
+   - If score > 0.5 → "positive"; else → "negative".
+   - Compute a believable confidence percentage.
+
+5. **Wait 800 ms before responding.** This makes the loading spinner on the page feel realistic. A real ML prediction takes some time; if we respond instantly, the UI looks fake.
+
+6. **Send the response** with `result`, `confidence`, `mock: true`, and a note explicitly stating this is a mock.
+
+7. **Handle errors.** If the upload itself fails (connection dropped), send status 500.
+
+**Why use SHA-256?**
+- Same image → same hash → same result. Re-uploading gives consistent answers.
+- Different images → different hashes → different results. Feels alive.
+- No actual pattern recognition. We are honest about this in the response.
+
+### 6.2.6 The Main Server / Router (Lines 86–113)
+
+```javascript
+const server = http.createServer((req, res) => {
+  const urlPath = decodeURIComponent(req.url.split("?")[0]);
+
+  // API routes
+  if (urlPath === "/detect-cancer") {
+    return handleDetectCancer(req, res);
+  }
+
+  // Static files
+  const requested = urlPath === "/" ? "/index.html" : urlPath;
+  const filePath = path.join(ROOT, requested);
+  if (!filePath.startsWith(ROOT)) {
+    res.writeHead(403);
+    return res.end("Forbidden");
+  }
+
+  fs.stat(filePath, (err, stat) => {
+    if (err || !stat.isFile()) {
+      res.writeHead(404, { "Content-Type": "text/html; charset=utf-8" });
+      return res.end(`<h1>404 Not Found</h1><p>${requested}</p>`);
+    }
+    const ext = path.extname(filePath).toLowerCase();
+    res.writeHead(200, {
+      "Content-Type": MIME[ext] || "application/octet-stream",
+      "Cache-Control": "no-cache",
+    });
+    fs.createReadStream(filePath).pipe(res);
+  });
+});
+```
+
+**What it does:**
+
+1. **Create the server.** `http.createServer` takes a function that runs for every incoming request.
+
+2. **Parse the URL.**
+   - `req.url` is something like `/price.html?ref=home`.
+   - `.split("?")[0]` strips off query parameters → `/price.html`.
+   - `decodeURIComponent` decodes any URL-encoded characters (e.g., `%20` → space).
+
+3. **Check for API route.** If the path is `/detect-cancer`, call the handler and return early.
+
+4. **Default the root.** If the user requested `/`, serve `index.html`.
+
+5. **Build the file path.** `path.join(ROOT, requested)` produces a full absolute path.
+
+6. **Security check.** Make sure the resulting path is inside ROOT. This prevents an attack like `/../../etc/passwd` which would try to read files outside the project. If the check fails, return 403 Forbidden.
+
+7. **Check if the file exists.** `fs.stat` is asynchronous — it tells us about the file (size, type) without actually reading it. If the file does not exist or is a directory (not a file), return 404.
+
+8. **Send the response.** Look up the MIME type from the file extension. If not in our map, default to `application/octet-stream` (which makes the browser download it instead of trying to render it).
+
+9. **Stream the file.** `fs.createReadStream(filePath).pipe(res)` reads the file in chunks and pipes them directly to the response. This means even very large files don't load entirely into memory.
+
+**Why streaming?** Memory efficient. A 100 MB file would be streamed without ever needing 100 MB of RAM.
+
+### 6.2.7 server.listen (Lines 115–119)
+
+```javascript
+server.listen(PORT, () => {
+  console.log(`\n  LADYLUMINA running at  http://localhost:${PORT}\n`);
+  console.log(`  POST /detect-cancer  (mock prediction endpoint)\n`);
+  console.log(`  Press Ctrl+C to stop.\n`);
+});
+```
+
+Starts the server listening on PORT. The callback runs once the server is ready and prints helpful messages to the console.
+
+The server will now keep running indefinitely, processing requests, until you press Ctrl+C or the process is killed.
+
+### 6.2.8 Logic Flow: A Complete Request
+
+Let's trace what happens when a user opens `http://localhost:8080/price.html` in their browser.
+
+1. Browser sends `GET /price.html HTTP/1.1` to localhost:8080.
+2. Node's HTTP server fires the callback. `req.url = "/price.html"`.
+3. URL is not `/detect-cancer`, so we go to static file handling.
+4. `filePath = "C:\Users\...\hospital-website-template\price.html"`.
+5. Path starts with ROOT — security check passed.
+6. `fs.stat` confirms the file exists.
+7. Extension is `.html` → MIME type `text/html; charset=utf-8`.
+8. Response headers sent with status 200.
+9. The file is streamed to the response.
+10. The browser receives the HTML.
+
+But wait — the HTML references CSS, JS, images, and fonts. So:
+
+11. Browser fires more requests:
+    - `GET /css/style.css`
+    - `GET /css/bootstrap.min.css`
+    - `GET /js/main.js`
+    - `GET /lib/owlcarousel/assets/owl.carousel.min.css`
+    - ... and many more
+12. Each goes through the same path: server.js → file → response.
+13. External resources (Google Fonts, Font Awesome CDN) are fetched directly by the browser from those domains, not through our server.
+
+A typical page load involves ~10–20 requests to our server, all completing in milliseconds.
+
+### 6.2.9 Logic Flow: A Prediction Request
+
+When the user clicks "Run Prediction" on `price.html`:
+
+1. JavaScript on the page builds a `FormData` object containing all form fields + the image file.
+2. `fetch("/detect-cancer", {method: "POST", body: formData})` sends the request.
+3. Browser auto-sets `Content-Type: multipart/form-data; boundary=...`.
+4. Node's HTTP server fires the callback with `req.url = "/detect-cancer"`.
+5. URL matches → `handleDetectCancer(req, res)` is called.
+6. Method is POST → continues.
+7. Body chunks arrive (a few KB at a time for a normal image).
+8. Total stays under 15 MB → keep collecting.
+9. End event fires once all data has arrived.
+10. We hash the buffer and pick result + confidence.
+11. After 800ms, send JSON response.
+12. Browser's `await res.json()` resolves with the response.
+13. JavaScript displays the result in the colored result box.
+14. Done.
+
+Total round-trip: about 1 second.
+
+### 6.2.10 Common Modifications to server.js
+
+If you need to change the server, here are common edits:
+
+**Change the port:**
+```javascript
+const PORT = 3000;  // or any number
+```
+
+**Add a new API endpoint:**
+```javascript
+if (urlPath === "/health") {
+  return sendJSON(res, 200, { ok: true });
+}
+```
+
+**Add a real model (replace mock):**
+Replace the `setTimeout(...)` block in `handleDetectCancer` with a fetch to your Python backend.
+
+**Increase upload limit:**
+```javascript
+const MAX = 50 * 1024 * 1024; // 50 MB
+```
+
+**Add logging:**
+```javascript
+console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
+```
+Put this at the top of the `createServer` callback.
+
+---
+
+## 6.3 The Launcher — run.bat
+
+A tiny file but does a lot for usability.
+
+```batch
+@echo off
+title LADYLUMINA - Local Server
+cd /d "%~dp0"
+echo Starting LADYLUMINA on http://localhost:8080 ...
+start "" "http://localhost:8080"
+node server.js
+pause
+```
+
+**Line by line:**
+
+1. **`@echo off`** — Hide the command being typed. Cleaner output.
+2. **`title LADYLUMINA - Local Server`** — Set the console window title.
+3. **`cd /d "%~dp0"`** — Change directory to the folder containing this `.bat` file. `%~dp0` is a Windows shortcut for "drive + path of this script". This means you can double-click `run.bat` from anywhere and it will move to the project folder.
+4. **`echo Starting LADYLUMINA on http://localhost:8080 ...`** — Print a message.
+5. **`start "" "http://localhost:8080"`** — Open the default web browser to the URL. The empty `""` is a quirk of `start` for setting the window title (it needs that placeholder).
+6. **`node server.js`** — Run the server. The script will block here until the server is stopped.
+7. **`pause`** — After the server stops, wait for a key press before closing. Prevents the window from disappearing immediately so you can read any error messages.
+
+**Use:** double-click in Windows Explorer. Browser opens. Server starts. Press Ctrl+C in the console to stop.
+
+---
+
+## 6.4 VSCode Configuration — launch.json and tasks.json
+
+These are the magic that makes pressing F5 in VSCode start everything.
+
+### 6.4.1 launch.json
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Run LADYLUMINA",
+      "url": "http://localhost:8080",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "Start LADYLUMINA Server"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Server only (no browser)",
+      "program": "${workspaceFolder}/server.js",
+      "console": "integratedTerminal"
+    }
+  ]
+}
+```
+
+**What it does:** Defines two debug configurations.
+
+**Configuration 1 — Run LADYLUMINA:**
+- `type: chrome` — uses VSCode's Chrome debugger.
+- `request: launch` — start a new Chrome window (instead of attaching to existing).
+- `url` — the page to open.
+- `webRoot` — tells the debugger where files live, so breakpoints in HTML/JS work correctly.
+- `preLaunchTask` — run a task before launching Chrome. We run the server task first.
+
+**Configuration 2 — Server only:**
+- Useful if you want to debug the Node server itself (set breakpoints in `server.js`).
+- Runs Node in VSCode's integrated terminal.
+
+**How to use:** Press F5, choose a configuration if prompted. Chrome window opens with the page loaded, server is running in the background. Set breakpoints by clicking left of line numbers.
+
+### 6.4.2 tasks.json
+
+```json
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start LADYLUMINA Server",
+      "type": "shell",
+      "command": "node",
+      "args": ["server.js"],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": {
+        "owner": "ladylumina-server",
+        "pattern": {
+          "regexp": "^$",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*LADYLUMINA running.*",
+          "endsPattern": ".*LADYLUMINA running.*"
+        }
+      }
+    }
+  ]
+}
+```
+
+**What it does:** Defines a background task that VSCode can run.
+
+Key parts:
+- `label` — the task name. Matches `preLaunchTask` in launch.json.
+- `type: shell` — run as a shell command.
+- `command: node`, `args: ["server.js"]` — equivalent to typing `node server.js`.
+- `isBackground: true` — VSCode treats this as long-running (won't wait for it to "finish").
+- `presentation` — show the output in a dedicated terminal panel.
+- `problemMatcher.background` — VSCode watches the output. When it sees "LADYLUMINA running", it knows the server is ready and triggers the next step (launching Chrome).
+
+This is what makes the F5 experience seamless: server starts, waits for ready signal, then opens browser.
+
+---
+
+## 6.5 The Homepage — index.html
+
+The landing page. First impression for any visitor.
+
+### 6.5.1 Document Head
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>LADYLUMINA - Breast Cancer Prediction Website</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+    
+    <link href="img/favicon.ico" rel="icon">
+    
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+```
+
+**What each line does:**
+
+- `<!DOCTYPE html>` — Tells the browser this is HTML5.
+- `<html lang="en">` — Page language is English. Useful for screen readers and search engines.
+- `<meta charset="utf-8">` — Character encoding is UTF-8 (supports Unicode characters).
+- `<title>` — Browser tab title.
+- `<meta viewport>` — Tells mobile browsers to use the actual device width, not pretend to be a desktop.
+- `<meta keywords>` and `<meta description>` — Used by some search engines.
+- `<link rel="icon">` — Browser tab icon.
+- `<link preconnect>` — Tells the browser to start the DNS lookup early for Google Fonts (small speed optimization).
+- Google Fonts link — Loads Roboto and Roboto Condensed.
+- Font Awesome link — Icon font.
+- Bootstrap Icons link — Another icon font.
+- Owl Carousel CSS — For the sliding sections.
+- Tempusdominus CSS — For date/time pickers.
+- Bootstrap CSS — The framework.
+- Our `style.css` — Last so it overrides Bootstrap where needed.
+
+**Order matters!** Later stylesheets override earlier ones. `style.css` comes last so our customizations win.
+
+### 6.5.2 The Navbar (Body Start)
+
+```html
+<div class="container-fluid sticky-top bg-white shadow-sm mb-5">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0">
+            <a href="index.html" class="navbar-brand">
+                <h1 class="m-0 text-uppercase text-primary">
+                    <i class="fa fa-clinic-medical me-2"></i>LADYLUMINA
+                </h1>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto py-0">
+                    <a href="index.html" class="nav-item nav-link active">Home</a>
+                    <a href="about.html" class="nav-item nav-link">About</a>
+                    <a href="service.html" class="nav-item nav-link">Precautions</a>
+                    <a href="price.html" class="nav-item nav-link">Prediction</a>
+                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+```
+
+**Breakdown:**
+- `container-fluid sticky-top bg-white shadow-sm mb-5` — Bootstrap classes:
+  - `container-fluid` — full-width container.
+  - `sticky-top` — sticks to top when scrolling.
+  - `bg-white` — white background.
+  - `shadow-sm` — subtle shadow.
+  - `mb-5` — bottom margin (spacing).
+- `container` — centered, max-width.
+- `navbar-expand-lg` — Navigation collapses to hamburger menu below "lg" breakpoint (large screens).
+- `navbar-brand` — The logo/brand area.
+- `navbar-toggler` — The hamburger button (only visible on small screens).
+- `data-bs-toggle="collapse"` `data-bs-target="#navbarCollapse"` — Bootstrap JS hooks. Clicking the hamburger toggles the collapse of the element with id `navbarCollapse`.
+- `nav-item nav-link active` — The "Home" link is marked active.
+
+### 6.5.3 The Hero Section
+
+The big banner with background image at the top of the home page. Uses `position-relative`, an absolutely positioned overlay, and a strong heading.
+
+### 6.5.4 About Section
+
+Two columns: text on one side, image on the other. Uses Bootstrap's `row` and `col-lg-6` grid.
+
+### 6.5.5 Features Grid
+
+Four icon boxes describing key features (Risk Prediction, Symptoms Checker, Accurate Testing, Free Access). Each is a column with a rounded icon, title, and short description.
+
+### 6.5.6 Carousel Sections
+
+The "Advantages of Breast Cancer Prediction" and "How the Model Works" sections use Owl Carousel. The HTML defines a series of items; the Owl Carousel JS turns them into a slider.
+
+```html
+<div class="owl-carousel price-carousel">
+    <div class="row no-gutters">
+        <div class="col-md-6"><img src="img/price-1.jpg"></div>
+        <div class="col-md-6"><p>...</p></div>
+    </div>
+    <!-- more slides -->
+</div>
+```
+
+The class `owl-carousel` triggers the JS to convert this into a slider.
+
+### 6.5.7 Team Testimonials
+
+Bottom section with team member cards and quotes.
+
+### 6.5.8 The Footer
+
+Multi-column footer:
+- "Get In Touch" with contact info.
+- "Quick Links" with internal page links.
+- "Popular Links" (duplicate of Quick Links).
+- "Newsletter" with email signup form.
+- Social media icons.
+
+### 6.5.9 Scripts at the Bottom
+
+```html
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="lib/tempusdominus/js/moment.min.js"></script>
+<script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+<script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+<script src="js/main.js"></script>
+```
+
+Loaded at the end so the page renders first, then JS adds interactivity. Order matters — jQuery first because everything depends on it.
+
+---
+
+## 6.6 The Prediction Page — price.html
+
+**This is the most important page in the project.** Most of our viva will be about this page. Let us study it in detail.
+
+### 6.6.1 The Head Section
+
+Same as other pages — fonts, icons, CSS frameworks — plus an extra inline `<style>` block with prediction-page-specific CSS:
+
+```html
+<style>
+    .predict-wrap { background-color: #f4f4f9; padding: 40px 0; }
+    .predict-card {
+        max-width: 900px; margin: 0 auto; background: #fff;
+        padding: 30px; border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .predict-card fieldset {
+        border: 2px solid #e6e9ef; border-radius: 8px;
+        padding: 18px; margin-bottom: 20px;
+    }
+    /* ... more styles ... */
+    .upload-zone {
+        border: 2px dashed #13C5DD; border-radius: 10px;
+        padding: 30px; text-align: center; cursor: pointer;
+    }
+    #preview { max-width: 100%; max-height: 280px; ... }
+    .result-positive { background: #fee; color: #b00020; ... }
+    .result-negative { background: #e8f7ee; color: #1b6b3a; ... }
+    .spinner-mini { ... animation: spin 0.8s linear infinite; ... }
+</style>
+```
+
+**Why inline?** These styles are specific to this page only. Putting them in `style.css` would pollute the global stylesheet. Inline keeps page-specific styling local.
+
+### 6.6.2 The Navbar
+
+Same as homepage but with the "Prediction" link marked `active`:
+```html
+<a href="price.html" class="nav-item nav-link active">Prediction</a>
+```
+
+### 6.6.3 The Form Structure
+
+The whole prediction interface is wrapped in a `<form>` tag:
+
+```html
+<form id="predictionForm" novalidate>
+    <fieldset>...Personal Information...</fieldset>
+    <fieldset>...Medical History...</fieldset>
+    <fieldset>...Lifestyle Information...</fieldset>
+    <fieldset>...Reproductive History...</fieldset>
+    <fieldset>...Clinical Features...</fieldset>
+    <fieldset>...Diagnostic Data...</fieldset>
+    <fieldset>...Metrics...</fieldset>
+    <fieldset>...Upload Mammogram Image...</fieldset>
+    <fieldset>...Consent...</fieldset>
+    <button type="submit" id="processBtn">Run Prediction</button>
+    <div id="result" class="result-box"></div>
+</form>
+```
+
+**Why `id="predictionForm"`?** So JavaScript can attach a submit handler.
+
+**Why `novalidate`?** This disables the browser's built-in form validation. We do our own validation in JavaScript so we can show nicer error messages.
+
+**Why use `<fieldset>` and `<legend>`?** They are semantic HTML for grouping related form fields. Screen readers announce them; sighted users see them as visual sections.
+
+### 6.6.4 A Sample Fieldset — Personal Information
+
+```html
+<fieldset>
+    <legend>Personal Information</legend>
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" class="form-control" required>
+
+    <label for="age">Age</label>
+    <input type="number" id="age" name="age" class="form-control" min="1" max="120" required>
+
+    <label>Gender</label>
+    <div class="mb-3">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="male" name="gender" value="Male">
+            <label class="form-check-label" for="male">Male</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="female" name="gender" value="Female" checked>
+            <label class="form-check-label" for="female">Female</label>
+        </div>
+    </div>
+
+    <label for="contact">Contact Number</label>
+    <input type="tel" id="contact" name="contact" class="form-control" pattern="[0-9+\- ]{7,15}">
+</fieldset>
+```
+
+**Key points:**
+
+- Every `<label>` has a `for` attribute matching the corresponding input's `id`. Clicking the label focuses the input. Screen readers read the label when the input gets focus.
+- `name` attributes are what gets sent to the server.
+- `type="text"`, `type="number"`, `type="radio"`, `type="tel"` — different input types give different mobile keyboards and validation.
+- `class="form-control"` — Bootstrap class for consistent styling.
+- `min="1" max="120"` — HTML5 validation hints (we still validate in JS).
+- `pattern="[0-9+\- ]{7,15}"` — HTML5 regex pattern for phone number format.
+- The default Gender is Female (`checked`) because the model is trained for breast cancer.
+
+### 6.6.5 The Upload Zone
+
+```html
+<fieldset>
+    <legend>Upload Mammogram Image</legend>
+    <label for="imageInput" class="upload-zone" id="uploadZone">
+        <i class="bi bi-cloud-upload" style="font-size:2.5em; color:#13C5DD;"></i>
+        <div id="uploadLabel" style="margin-top:8px; color:#555;">
+            Click here to choose an image (JPG / PNG)
+        </div>
+        <input type="file" id="imageInput" accept="image/*">
+    </label>
+    <img id="preview" alt="Preview">
+</fieldset>
+```
+
+**The clever part:**
+- The `<input type="file">` is inside a `<label>`.
+- We hide the actual file input with CSS (`display: none` in the `.upload-zone` rule).
+- Clicking anywhere on the label is equivalent to clicking the input.
+- This lets us style the upload area however we want (dashed border, cloud icon) — much nicer than the default file input button.
+
+**`accept="image/*"`** restricts the file picker to image files.
+
+The `<img id="preview">` is initially hidden (display: none) and shown after the user picks a file.
+
+### 6.6.6 The Submit Button and Result Box
+
+```html
+<button type="submit" id="processBtn" style="...">Run Prediction</button>
+<div id="result" class="result-box"></div>
+<div class="mock-note">
+    This is a demo. Predictions are generated by a mock backend and are <b>not</b> medical advice.
+</div>
+```
+
+The button has inline styles for the teal color and large clickable area.
+The result box is initially hidden and only shown after a prediction completes.
+The mock disclaimer is always visible — honest communication.
+
+### 6.6.7 The JavaScript at the Bottom of price.html
+
+```html
+<script>
+    const imageInput = document.getElementById("imageInput");
+    const preview = document.getElementById("preview");
+    const uploadLabel = document.getElementById("uploadLabel");
+    const form = document.getElementById("predictionForm");
+    const resultBox = document.getElementById("result");
+    const processBtn = document.getElementById("processBtn");
+```
+
+**Variable setup:** Cache references to all the elements we will use. Doing `getElementById` once at the start is faster than calling it inside an event handler each time.
+
+### 6.6.8 The Image Preview Handler
+
+```javascript
+imageInput.addEventListener("change", () => {
+    const file = imageInput.files[0];
+    if (!file) return;
+    uploadLabel.textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        preview.src = e.target.result;
+        preview.style.display = "block";
+    };
+    reader.readAsDataURL(file);
+});
+```
+
+**What it does:**
+
+1. Listen for the `change` event on the file input.
+2. When fired, grab the first selected file.
+3. If no file (user cancelled), do nothing.
+4. Update the label text to show the chosen filename.
+5. Create a `FileReader` — a browser API for reading file contents.
+6. When the read completes (`onload`), set the image src to the result (a base64 data URL).
+7. Make the preview visible.
+8. Start reading the file as a data URL.
+
+**Why `FileReader`?** We cannot just set `preview.src = file` — that doesn't work. We need to convert the binary file to a string the `<img>` tag can use. A data URL like `data:image/png;base64,iVBORw0KGgo...` is the way.
+
+### 6.6.9 The Result Display Helper
+
+```javascript
+function showResult(cls, html) {
+    resultBox.className = "result-box " + cls;
+    resultBox.innerHTML = html;
+    resultBox.style.display = "block";
+    resultBox.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+```
+
+**What it does:** Helper to display a result.
+- Set the CSS class (controls color).
+- Set the inner HTML.
+- Make it visible.
+- Smoothly scroll the result into view (so user doesn't have to scroll).
+
+**Why a helper?** We call it 5+ times for different result types (warning, positive, negative, error). DRY.
+
+### 6.6.10 The Form Submit Handler — The Main Flow
+
+```javascript
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    resultBox.style.display = "none";
+
+    if (!form.name.value.trim() || !form.age.value) {
+        return showResult("result-warning", "Please fill in your name and age.");
+    }
+    if (!document.getElementById("agreement").checked ||
+        !document.getElementById("confidentiality").checked) {
+        return showResult("result-warning", "Please accept both consent checkboxes.");
+    }
+    if (imageInput.files.length === 0) {
+        return showResult("result-warning", "Please upload a mammogram image.");
+    }
+
+    const formData = new FormData(form);
+    formData.append("image", imageInput.files[0]);
+
+    processBtn.disabled = true;
+    const originalText = processBtn.textContent;
+    processBtn.innerHTML = '<span class="spinner-mini"></span> Analyzing...';
+
+    try {
+        const res = await fetch("/detect-cancer", { method: "POST", body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Server error");
+
+        if (data.result === "positive") {
+            showResult("result-positive",
+                `<i class="fa fa-exclamation-triangle"></i>
+                 Possible signs detected (confidence ${data.confidence}%).<br>
+                 <small style="font-weight:400">Please consult a qualified oncologist for proper diagnosis.</small>`);
+        } else {
+            showResult("result-negative",
+                `<i class="fa fa-check-circle"></i>
+                 No signs detected (confidence ${data.confidence}%).<br>
+                 <small style="font-weight:400">Continue regular screening as recommended by your doctor.</small>`);
+        }
+    } catch (err) {
+        showResult("result-warning",
+            "Could not reach the prediction service. Make sure the local server is running.<br>" +
+            "<small>" + err.message + "</small>");
+    } finally {
+        processBtn.disabled = false;
+        processBtn.textContent = originalText;
+    }
+});
+```
+
+**Walkthrough step by step:**
+
+1. **`e.preventDefault()`** — Stop the form from doing its default behavior (reloading the page). We are handling everything via JavaScript.
+
+2. **Hide any previous result.**
+
+3. **Validation block:**
+   - Name and age required.
+   - Both consent checkboxes must be ticked.
+   - An image must be uploaded.
+   - Each failure shows a yellow warning and returns early.
+
+4. **Build FormData.** `new FormData(form)` collects every named input in the form. We additionally append the image file with the key "image".
+
+5. **Disable the button.** Prevents double-submit. Replace text with a spinner and "Analyzing..." to show progress.
+
+6. **The fetch call** — `await fetch(...)`. This sends the POST request and waits for the response.
+
+7. **Parse the response.** `await res.json()` reads the body and parses it as JSON.
+
+8. **Error check.** If the response is not 2xx (`res.ok` is false), throw an error.
+
+9. **Display the result.** Different color/icon for positive vs negative.
+
+10. **Catch block.** If anything went wrong (network error, server crashed), show a friendly warning.
+
+11. **Finally block.** Always re-enable the button and restore its text, regardless of success or failure.
+
+### 6.6.11 The Complete Flow When User Clicks "Run Prediction"
+
+1. User clicks the teal button.
+2. Form's submit event fires.
+3. `e.preventDefault()` stops page reload.
+4. Validation runs — if any check fails, show warning and stop.
+5. Button is disabled, text changes to "Analyzing..." with spinner.
+6. FormData is built with all fields + image.
+7. `fetch()` sends POST to `/detect-cancer`.
+8. Browser sets `Content-Type: multipart/form-data` with a boundary.
+9. Server receives request, calls `handleDetectCancer`.
+10. Server collects body, hashes, picks result.
+11. Server waits 800ms, sends JSON response.
+12. Browser receives response, fetch promise resolves.
+13. `await res.json()` parses the JSON.
+14. JavaScript reads `data.result` and `data.confidence`.
+15. `showResult()` displays the colored result box.
+16. Page smoothly scrolls so the result is visible.
+17. Button is re-enabled and text restored.
+
+Total time: about 1 second.
+
+### 6.6.12 Common Modifications to price.html
+
+**Make the form shorter:** Delete fieldsets you don't need.
+
+**Add a new field:**
+```html
+<label for="bp">Blood Pressure</label>
+<input type="text" id="bp" name="blood_pressure" class="form-control">
+```
+It will automatically be included in the POST because `FormData(form)` reads every named input.
+
+**Change result wording:**
+Edit the strings inside `showResult("result-positive", ...)` and `showResult("result-negative", ...)`.
+
+**Change colors:**
+Edit the inline `<style>` block — `.result-positive` and `.result-negative` rules.
+
+---
+
+## 6.7 The About Page — about.html
+
+A simpler page than price.html. Same head, same navbar, same footer. The content section just has paragraphs and images describing the mission and vision.
+
+Structure:
+```html
+<!-- Hero / Page Header -->
+<div class="container-fluid bg-primary py-5 bg-header">
+    <div class="row py-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 text-white">About Us</h1>
+        </div>
+    </div>
+</div>
+
+<!-- About content -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <img src="img/about.jpg" alt="About">
+            </div>
+            <div class="col-lg-5">
+                <h6>ABOUT US</h6>
+                <h1>Our Mission</h1>
+                <p>...</p>
+            </div>
+        </div>
+    </div>
+</div>
+```
+
+No JavaScript needed beyond the site-wide `main.js`.
+
+---
+
+## 6.8 The Precautions Page — service.html
+
+Lists breast cancer precautions and prevention tips. Same template structure. The content is a series of cards or list items.
+
+Structure: page header → list of tips → footer.
+
+Each tip is typically a small card with an icon, title, and description:
+
+```html
+<div class="col-lg-4 col-md-6">
+    <div class="service-item bg-white p-4">
+        <i class="fa fa-3x fa-heartbeat text-primary mb-4"></i>
+        <h4>Healthy Diet</h4>
+        <p>Eat plenty of fruits, vegetables, and whole grains. Limit processed foods.</p>
+    </div>
+</div>
+```
+
+Repeated for each precaution.
+
+---
+
+## 6.9 The Contact Page — contact.html
+
+Provides ways to reach out — phone, email, physical address — plus a contact form.
+
+Structure:
+- Page header with "Contact Us".
+- Three info boxes (location, phone, email).
+- A form (name, email, subject, message).
+- Footer.
+
+The form's `action` is `"#"` — submitting doesn't do anything. In a real deployment, this would post to a backend service that emails the message.
+
+---
+
+## 6.10 The Appointment Page — appointment.html
+
+A patient appointment booking form. Has fields for personal info, preferred date/time, and reason for visit.
+
+Uses the Tempusdominus date/time picker, initialized in `main.js`:
+```html
+<input type="text" class="form-control date" placeholder="Date">
+<input type="text" class="form-control time" placeholder="Time">
+```
+
+The `.date` and `.time` classes are JS hooks that turn the inputs into calendar/clock pickers.
+
+Form action is also `"#"` — no real submission.
+
+---
+
+## 6.11 The Blog Pages — blog.html and detail.html
+
+**blog.html** is a grid of blog post cards:
+```html
+<div class="col-lg-4 col-md-6">
+    <div class="blog-item">
+        <img src="img/blog-1.jpg">
+        <div class="bg-white p-4">
+            <h4><a href="detail.html">Blog Post Title</a></h4>
+            <p>Short excerpt...</p>
+            <a href="detail.html" class="btn btn-primary">Read More</a>
+        </div>
+    </div>
+</div>
+```
+
+**detail.html** is a single blog post — full article body, comments section (placeholder), related posts.
+
+These are template pages — placeholder content for now. In a real deployment, they would be powered by a CMS or markdown files.
+
+---
+
+## 6.12 Custom CSS — style.css
+
+Our custom styles override Bootstrap defaults where needed. About 246 lines.
+
+### 6.12.1 CSS Custom Properties (Variables)
+
+```css
+:root {
+    --primary: #13C5DD;
+    --secondary: #354F8E;
+    --light: #EFF5F9;
+    --dark: #1D2A4D;
+}
+```
+
+These are CSS variables. Use them anywhere with `var(--primary)`. Change them in one place to retheme the entire site.
+
+### 6.12.2 Body and Typography
+
+```css
+body { font-family: 'Roboto', sans-serif; }
+
+h1, h2, .font-weight-bold {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+}
+```
+
+Sets the default font family. Headings use Roboto Condensed for a more impactful look.
+
+### 6.12.3 Buttons
+
+Custom button styles built on top of Bootstrap's:
+
+```css
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+.btn-primary:hover {
+    background-color: var(--secondary);
+    border-color: var(--secondary);
+}
+```
+
+Hovering changes from teal to navy — a clear visual feedback.
+
+### 6.12.4 Navbar Styles
+
+Custom underline animation under nav links:
+
+```css
+.navbar-light .navbar-nav .nav-link {
+    position: relative;
+    padding: 30px 15px;
+    color: var(--dark);
+}
+
+.navbar-light .navbar-nav .nav-link::before {
+    content: "";
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary);
+    transition: 0.5s;
+}
+
+.navbar-light .navbar-nav .nav-link:hover::before,
+.navbar-light .navbar-nav .nav-link.active::before {
+    width: calc(100% - 30px);
+    left: 15px;
+}
+```
+
+The `::before` pseudo-element creates a small line under each nav link. On hover or when active, the line animates from 0 width to full width. A subtle but professional touch.
+
+### 6.12.5 Carousel Styles
+
+Custom arrow buttons and dot indicators for Owl Carousel.
+
+### 6.12.6 Service Item Cards
+
+The cards on the home page and service page have a rotating icon on hover — pure CSS animation.
+
+### 6.12.7 Back-to-Top Button
+
+```css
+.back-to-top {
+    position: fixed;
+    display: none;
+    width: 45px;
+    height: 45px;
+    bottom: 25px;
+    right: 25px;
+    z-index: 99;
+}
+```
+
+Hidden by default. JavaScript in `main.js` shows it when the user scrolls down past a threshold.
+
+---
+
+## 6.13 Custom JavaScript — main.js
+
+Just 104 lines. All site-wide interactions live here.
+
+### 6.13.1 Dropdown Hover (Lines 1–20)
+
+```javascript
+(function ($) {
+    "use strict";
+    
+    // Dropdown on mouse hover
+    $(document).ready(function () {
+        function toggleNavbarMethod() {
+            if ($(window).width() > 992) {
+                $('.navbar .dropdown').on('mouseover', function () {
+                    $('.dropdown-toggle', this).trigger('click');
+                }).on('mouseout', function () {
+                    $('.dropdown-toggle', this).trigger('click').blur();
+                });
+            } else {
+                $('.navbar .dropdown').off('mouseover').off('mouseout');
+            }
+        }
+        toggleNavbarMethod();
+        $(window).resize(toggleNavbarMethod);
+    });
+```
+
+**What it does:** On desktop (window width > 992 pixels), dropdowns open on mouse hover. On mobile, they only open on click (Bootstrap default).
+
+The `(function ($) { ... })(jQuery)` wrapper is an old jQuery convention — passes jQuery in as `$` and keeps the rest of the world isolated.
+
+### 6.13.2 Back-to-Top Button (Lines 21–30)
+
+```javascript
+$(window).scroll(function () {
+    if ($(this).scrollTop() > 100) {
+        $('.back-to-top').fadeIn('slow');
+    } else {
+        $('.back-to-top').fadeOut('slow');
+    }
+});
+$('.back-to-top').click(function () {
+    $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+    return false;
+});
+```
+
+**What it does:**
+- When the user scrolls past 100 pixels from the top, the back-to-top button fades in.
+- When near the top again, it fades out.
+- Clicking it smoothly animates back to top over 1.5 seconds using the easing library's `easeInOutExpo` curve.
+
+### 6.13.3 Date/Time Picker Initialization
+
+```javascript
+$('.date').datetimepicker({
+    format: 'L'
+});
+$('.time').datetimepicker({
+    format: 'LT'
+});
+```
+
+**What it does:** Initializes the Tempusdominus picker on any input with class `date` or `time`. `format: 'L'` is moment.js shorthand for locale date format; `LT` is locale time.
+
+Used on the appointment page.
+
+### 6.13.4 Carousel Initialization
+
+```javascript
+$(".price-carousel").owlCarousel({
+    autoplay: true,
+    smartSpeed: 1500,
+    dots: false,
+    loop: true,
+    nav: true,
+    navText : [
+        '<i class="bi bi-arrow-left"></i>',
+        '<i class="bi bi-arrow-right"></i>'
+    ],
+    responsive: {
+        0:{ items:1 },
+        992:{ items:2 }
+    }
+});
+
+$(".team-carousel").owlCarousel({ /* similar config */ });
+$(".testimonial-carousel").owlCarousel({ /* config with dots */ });
+$(".related-carousel").owlCarousel({ /* config */ });
+```
+
+**What it does:** Activates Owl Carousel on each carousel container. Options:
+- `autoplay: true` — slides advance automatically.
+- `smartSpeed: 1500` — speed of slide animation (milliseconds).
+- `dots: false` — no dot indicators (some carousels have them).
+- `loop: true` — wrap from last slide to first.
+- `nav: true` — show prev/next arrows.
+- `navText` — custom arrow icons.
+- `responsive` — show different number of items at different screen widths.
+
+---
+
+## 6.14 Third-Party Libraries Used
+
+### 6.14.1 Loaded from CDN
+- **jQuery 3.4.1** — DOM manipulation, used everywhere.
+- **Bootstrap 5.0.0 (JS bundle)** — navbar collapse, modals, etc.
+- **Google Fonts (Roboto, Roboto Condensed)** — typography.
+- **Font Awesome 5.15** — icons.
+- **Bootstrap Icons 1.4.1** — additional icons.
+
+### 6.14.2 Loaded Locally (in lib/)
+- **Owl Carousel** — image and content sliders.
+- **Tempusdominus + Moment.js + Moment Timezone** — date/time pickers.
+- **jQuery Easing** — animation easing functions.
+- **Waypoints** — scroll-trigger library.
+
+### 6.14.3 Bootstrap CSS
+Loaded from `css/bootstrap.min.css` (local copy). Pre-compiled, minified.
+
+### 6.14.4 Why a Mix?
+- CDN: easy, cached across sites (faster if user has visited any other site that uses jQuery from the same CDN).
+- Local: works offline. Important for development.
+
+A real production app might bundle everything together with a tool like Webpack for optimal loading.
+
+---
+
+## 6.15 The Complete Request-Response Flow
+
+Putting it all together. Let us trace a complete user session.
+
+### 6.15.1 User Opens the Site
+
+1. User double-clicks `run.bat`.
+2. `run.bat` runs `node server.js`.
+3. Server prints "LADYLUMINA running at http://localhost:8080".
+4. `run.bat` opens the browser to that URL.
+5. Browser sends `GET /` to localhost:8080.
+6. Server defaults to serving `index.html`.
+7. Browser parses HTML.
+8. Browser makes additional requests for CSS, JS, images (15+ requests).
+9. Each is served by the same server.
+10. Page renders. User sees the home page.
+
+### 6.15.2 User Navigates to Prediction Page
+
+1. User clicks "Prediction" in the navbar.
+2. Browser sends `GET /price.html`.
+3. Server reads and streams the file.
+4. Browser parses HTML, requests CSS, JS, images.
+5. The page-specific JavaScript at the bottom of `price.html` runs.
+6. Event listeners are attached to the file input and form.
+7. Page is ready for interaction.
+
+### 6.15.3 User Picks an Image
+
+1. User clicks the dashed upload zone.
+2. The browser's native file picker opens.
+3. User picks `mammogram.png`.
+4. The `change` event fires on the hidden `<input>`.
+5. Our handler reads the file with `FileReader`.
+6. Once read, the data URL is set as the preview image's src.
+7. Preview image is shown.
+
+### 6.15.4 User Fills the Form
+
+1. User types name, age, contact.
+2. Picks options in dropdowns.
+3. Checks the consent checkboxes.
+4. Reviews everything.
+
+### 6.15.5 User Clicks "Run Prediction"
+
+1. Submit event fires on the form.
+2. `e.preventDefault()` stops page reload.
+3. Validation runs — all checks pass.
+4. Button is disabled, spinner appears.
+5. `FormData` is built — all form fields + the image file.
+6. `fetch("/detect-cancer", { method: "POST", body: formData })` is called.
+7. Browser sends a multipart POST request.
+8. Server receives, routes to `handleDetectCancer`.
+9. Server collects body chunks (a few KB at a time).
+10. Once complete, server hashes the bytes.
+11. Result and confidence computed.
+12. Server waits 800ms (intentional UX delay).
+13. Server sends JSON response.
+14. Browser receives response, fetch promise resolves.
+15. `res.json()` parses the body.
+16. Our JavaScript reads `data.result` and displays the colored result box.
+17. Page smoothly scrolls so the result is visible.
+18. Button is re-enabled, text restored.
+
+### 6.15.6 User Closes the Browser
+
+1. The browser tab closes.
+2. Server continues running (we did not stop it).
+3. User can reopen the page anytime.
+4. To stop the server, user presses Ctrl+C in the console window.
+
+---
+
+## 6.16 Data Flow Diagrams
+
+### 6.16.1 The Big Picture
+
+```
+USER                  BROWSER                 OUR SERVER             OS / DISK
+ │                       │                        │                      │
+ │  clicks "Prediction"  │                        │                      │
+ │ ────────────────────► │                        │                      │
+ │                       │  GET /price.html       │                      │
+ │                       │ ─────────────────────► │                      │
+ │                       │                        │  fs.stat(price.html) │
+ │                       │                        │ ───────────────────► │
+ │                       │                        │ ◄─── file metadata ──│
+ │                       │                        │                      │
+ │                       │                        │  fs.createReadStream │
+ │                       │                        │ ───────────────────► │
+ │                       │ ◄── HTTP 200 + HTML ── │ ◄── streaming bytes ─│
+ │  sees the page        │                        │                      │
+ │ ◄──────────────────── │                        │                      │
+```
+
+### 6.16.2 The Prediction Flow
+
+```
+USER         BROWSER (price.html)        SERVER (server.js)
+ │                  │                            │
+ │  clicks button   │                            │
+ │ ────────────────►│                            │
+ │                  │  validate form ✓           │
+ │                  │  build FormData            │
+ │                  │  show "Analyzing..."       │
+ │                  │                            │
+ │                  │  POST /detect-cancer       │
+ │                  │  + multipart body          │
+ │                  │ ─────────────────────────► │
+ │                  │                            │ method === POST ✓
+ │                  │                            │ collect chunks
+ │                  │                            │ total < 15 MB ✓
+ │                  │                            │ hash bytes (SHA-256)
+ │                  │                            │ pick result + confidence
+ │                  │                            │ wait 800ms
+ │                  │                            │
+ │                  │ ◄──── JSON response ────── │
+ │                  │  parse JSON                │
+ │                  │  show colored result box   │
+ │                  │  scroll into view          │
+ │  sees result     │                            │
+ │ ◄────────────────│                            │
+```
+
+### 6.16.3 The Memory Map of a Single Request
+
+When a single POST /detect-cancer request is being handled, server memory contains:
+```
+[ server.js code ]            (loaded once at startup)
+[ HTTP server object ]        (singleton)
+[ MIME map ]                  (constant)
+[ chunks array ]              (growing as the body arrives)
+[ Buffer.concat result ]      (allocated when end fires)
+[ hash result (32 bytes) ]    (tiny)
+[ JSON response string ]      (small)
+```
+
+For a 5 MB image:
+- `chunks` array: ~5 MB (held until end fires).
+- `Buffer.concat(chunks)`: another 5 MB (combined buffer).
+- Hash: 32 bytes.
+- Response: < 1 KB.
+
+Total: about 10 MB of memory while processing. Released after the response is sent.
+
+---
+
+## 6.17 Reading Order for a New Developer
+
+If someone else joined the team tomorrow, this is the order I would have them read the code:
+
+### 6.17.1 Day 1 — Get the Big Picture
+1. This file (Breast-Cancer-Project.md), Parts 1, 13, and 24.
+2. The project README (this document).
+3. Run the project (run.bat).
+4. Click around the website, use the prediction page.
+
+### 6.17.2 Day 2 — Understand the Server
+1. `server.js` line by line.
+2. This document, section 6.2.
+3. Stop and restart the server several times.
+4. Try modifying — change the port, change a response message.
+
+### 6.17.3 Day 3 — Understand the Prediction Page
+1. `price.html` from top to bottom.
+2. This document, section 6.6.
+3. Use the browser DevTools (F12) to inspect the network requests.
+4. Try modifying the form — add a field, change colors.
+
+### 6.17.4 Day 4 — Other Pages and Styling
+1. Skim `index.html`, `about.html`, `service.html`.
+2. Look through `css/style.css`.
+3. Look through `js/main.js`.
+4. Read this document, sections 6.5, 6.7–6.13.
+
+### 6.17.5 Day 5 — The Model and Notebook
+1. Read this document, Part 5 (notebook walkthrough).
+2. Open the notebook in Kaggle or Colab.
+3. Run a few cells to see the data and the model.
+4. Read this document, Part 4 (dataset reference).
+
+### 6.17.6 Day 6 — Build Something
+1. Pick a small feature (e.g., add a "Reset Form" button).
+2. Make the change.
+3. Test it.
+4. Repeat with progressively bigger changes.
+
+---
+
+## 6.18 Debugging Each Component
+
+How to find problems when something breaks.
+
+### 6.18.1 Server Won't Start
+
+Symptoms: console shows an error and quits.
+
+**`Error: listen EADDRINUSE :::8080`**
+Port 8080 is already used by another process. Either:
+- Find and kill the other process: `netstat -ano | findstr 8080`, then `taskkill /F /PID <pid>`.
+- Or change PORT in server.js.
+
+**`SyntaxError: ... near ...`**
+You introduced a typo in `server.js`. Read the error line number, fix it.
+
+**`Cannot find module 'http'`**
+Highly unlikely — `http` is built-in. Something is wrong with your Node installation. Reinstall.
+
+### 6.18.2 Page Loads But Has No Styling
+
+Symptoms: text shows but everything is unstyled.
+
+- Open browser DevTools (F12) → Console tab.
+- Look for red errors about failed CSS loads.
+- Check the URL in the error — is the CSS file path right?
+- Make sure `css/style.css` exists.
+- Make sure the server is serving CSS files (check Network tab).
+
+### 6.18.3 Prediction Button Does Nothing
+
+Symptoms: clicking "Run Prediction" has no effect.
+
+- Open DevTools Console.
+- Look for JavaScript errors.
+- In Network tab, click the button again — do you see a request to `/detect-cancer`?
+- If yes but no response: server is hung or crashed.
+- If no request at all: the JS submit handler is not attached. Check for syntax errors in the script.
+
+### 6.18.4 Prediction Returns Error
+
+Symptoms: yellow warning box appears with an error.
+
+- Read the error text — it tells you what went wrong.
+- Common: "Could not reach the prediction service" → server is not running. Start it.
+- "No image received" → form submission missing the image. Check the FormData code.
+- Check the Network tab → click the failed request → look at Response panel.
+
+### 6.18.5 Image Preview Doesn't Show
+
+Symptoms: user picks a file, no preview appears.
+
+- Console errors?
+- Is `imageInput.files[0]` undefined?
+- Did `FileReader.readAsDataURL` actually fire? Add `console.log`.
+- Is the `<img id="preview">` element actually in the page? Inspect with DevTools.
+
+### 6.18.6 Layout Looks Wrong on Mobile
+
+- Use DevTools → Toggle Device Toolbar (Ctrl+Shift+M) to simulate phones.
+- Look for missing `<meta viewport>` tag (should be in every HTML head).
+- Check for fixed widths that don't scale (use percentages or rem units).
+
+### 6.18.7 The Navbar Hamburger Doesn't Work
+
+- jQuery and Bootstrap JS must both be loaded BEFORE `main.js`.
+- Check Console for "jQuery is not defined" or similar.
+- Check the order of `<script>` tags at the bottom of the HTML.
+
+### 6.18.8 Useful DevTools Tabs
+
+- **Elements:** Inspect HTML and CSS.
+- **Console:** See errors and run JavaScript live.
+- **Network:** See every request and response.
+- **Sources:** Set breakpoints in JavaScript.
+- **Application:** Local storage, cookies, service workers.
+- **Lighthouse:** Audit performance, accessibility, SEO.
+
+---
+
+## 6.19 Quick Reference — Where Is X?
+
+A cheat sheet for "where do I find/change X?"
+
+| What I want to change       | File(s)                                          |
+|-----------------------------|--------------------------------------------------|
+| Server port                 | `server.js` line 5                               |
+| Upload size limit           | `server.js` line 51 (`const MAX`)                |
+| Mock prediction logic       | `server.js` `handleDetectCancer` function        |
+| Mock delay (800ms)          | `server.js` `setTimeout` near bottom             |
+| Site theme colors           | `css/style.css` `:root` block                    |
+| Site fonts                  | `css/style.css` body and h1/h2 rules             |
+| Navbar links                | Each .html page top section                      |
+| Footer content              | Each .html page near bottom                      |
+| Page titles (browser tab)   | Each .html `<title>` tag                         |
+| Prediction form fields      | `price.html` fieldsets                           |
+| Prediction result wording   | `price.html` `<script>` block at bottom          |
+| Image upload zone styling   | `price.html` `<style>` block at top              |
+| Carousel speed              | `js/main.js` `owlCarousel` config                |
+| Back-to-top behavior        | `js/main.js`                                     |
+| Date picker format          | `js/main.js` `datetimepicker` calls              |
+| VSCode F5 behavior          | `.vscode/launch.json` and `.vscode/tasks.json`   |
+| Double-click launcher       | `run.bat`                                        |
+| Browser tab icon            | `img/favicon.ico` (currently missing)            |
+| Hero image                  | `img/hero.jpg`                                   |
+| About image                 | `img/about.jpg`                                  |
+| Team member photos          | `img/testimonial-1.jpg` to `testimonial-3.jpg`   |
+| Feature card images         | `img/price-1.jpg` to `price-4.jpg`               |
+| Blog post images            | `img/blog-1.jpg` to `blog-3.jpg`                 |
+| Bootstrap (do not edit)     | `css/bootstrap.min.css`                          |
+| jQuery (do not edit)        | Loaded from CDN in every HTML page               |
+| Third-party libs            | `lib/` folder                                    |
+
+---
+
+## 6.20 Summary of Part 6
+
+You now have a complete map of the project codebase. You know:
+
+- **What each file does** (file tree + table).
+- **How the server works** (server.js section by section).
+- **How the prediction page works** (price.html in detail).
+- **How the styling and behavior are organized** (style.css and main.js).
+- **How requests flow end-to-end** (diagrams).
+- **How to debug problems** (component-by-component checklist).
+- **Where to find anything** (quick reference table).
+
+This is enough to extend the project, debug issues, present it confidently in any viva, and onboard new developers.
+
+The project is intentionally small and well-organized so it can be understood completely. Larger production projects use the same patterns but at greater scale. The fundamentals you learn here transfer everywhere.
 
 ---
 
